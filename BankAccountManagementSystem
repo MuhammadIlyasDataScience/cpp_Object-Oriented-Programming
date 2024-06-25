@@ -1,0 +1,86 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+	string name;
+	int BankAcccountNum;
+	string typeAccount;
+	double balance;
+public:
+
+	BankAccount():name(""),BankAcccountNum(0),typeAccount(""),balance(0)
+	{}
+
+	BankAccount(string n, int bankNum,string type,double bal):
+		name(n),BankAcccountNum(bankNum),typeAccount(type),balance (bal)
+	{}
+
+	BankAccount(const BankAccount& temp):
+		name(temp.name),BankAcccountNum(temp.BankAcccountNum),typeAccount(temp.typeAccount),balance(temp.balance)
+	{}
+
+	void deposit(double amount) {
+		balance += amount;
+	}
+
+	double withdraw(double amount) {
+
+		if (amount <= balance) {
+			balance -= amount;
+			return amount;
+		}
+		else {
+			cout << "Sorry! Your balance is insufficient for this request";
+			return 0;
+		}
+	}
+
+	friend istream& operator >> (istream& in, BankAccount& temp) {
+
+		cout << "Enter name: ";
+		in.ignore();
+		getline(in,temp.name);
+		cout << "Enter Bank Account Number: ";
+		in >> temp.BankAcccountNum;
+		cout << "Enter Bank Account type: ";
+		in.ignore();
+		in >> temp.typeAccount;
+		cout << "Enter Balance: ";
+		in >> temp.balance;
+
+		return in;
+	}
+	friend ostream& operator << (ostream& out, const BankAccount& temp) {
+
+		out << "Name: " << temp.name << endl
+			<< "Bank Account Number: " << temp.BankAcccountNum << endl
+			<< "Acccount Type: " << temp.typeAccount << endl
+			<< "Current Balance: " << temp.balance;
+
+		return out;
+	}
+};
+
+int main() {
+	int num;
+	cout << "Enter number of Bank users: ";
+	cin >> num;
+	
+	BankAccount* bptr = new BankAccount[num];
+
+	for (int i = 0; i < num; i++) {
+
+		cout << "Enter Bank Account Details for user" << i + 1 << ": \n";
+		cin >> bptr[i];
+	}
+
+	for (int i = 0; i < num; i++) {
+
+		cout << "Bank Account Details for user" << i + 1 << ": ";
+		cout << bptr[i] << "\n\n";
+	}
+
+	delete[]bptr;
+}
